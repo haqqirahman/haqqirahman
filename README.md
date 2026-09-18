@@ -26,7 +26,7 @@ Building secure infrastructure, automation tools, and intelligent applications.
 
 ### ▶ [PLAY NOW — INSERT COIN](https://haqqirahman.github.io/haqqirahman/game/) 🟡
 
-Bisa dimainkan langsung — bukan sekadar gambar! 🍽️ Kumpulkan coin · 👻 Hindari 4 hantu yang mengejar · 🔵 Power pellet = balik mengejar mereka · 💀 Bisa mati & punya nyawa
+Mainin aja dulu
 
 </div>
 
