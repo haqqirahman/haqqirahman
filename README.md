@@ -16,6 +16,22 @@ Building secure infrastructure, automation tools, and intelligent applications.
 
 ---
 
+## 🕹️ Pac-Man Arcade — Playable!
+
+<div align="center">
+
+<a href="https://haqqirahman.github.io/haqqirahman/game/">
+  <img src="assets/arcade-banner.svg" alt="Pac-Man Arcade — Click to Play!" width="100%" />
+</a>
+
+### ▶ [PLAY NOW — INSERT COIN](https://haqqirahman.github.io/haqqirahman/game/) 🟡
+
+Bisa dimainkan langsung — bukan sekadar gambar! 🍽️ Kumpulkan coin · 👻 Hindari 4 hantu yang mengejar · 🔵 Power pellet = balik mengejar mereka · 💀 Bisa mati & punya nyawa
+
+</div>
+
+---
+
 ## 👨‍💻 About Me
 
 - 🐧 Interested in **Linux Server, Virtualization, and Cloud Infrastructure**
@@ -74,6 +90,8 @@ AI-assisted CCTV monitoring environment using:
 ---
 
 ## 🕹️ Contribution Arcade
+
+> 🎮 Ini versi graf kontribusinya. Mau main beneran? → **[▶ Play Pac-Man Arcade](https://haqqirahman.github.io/haqqirahman/game/)**
 
 <div align="center">
 

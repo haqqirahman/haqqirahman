@@ -1,0 +1,168 @@
+/* PAC-MAN ARCADE — cabinet styling */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: radial-gradient(ellipse at top, #0d0d2b 0%, #04040c 60%, #000 100%);
+  color: #e8e8ff;
+  font-family: "Press Start 2P", monospace;
+  min-height: 100%;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  padding: 24px 12px 60px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cabinet {
+  width: 620px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.marquee {
+  text-align: center;
+  padding: 18px 10px 14px;
+  width: 100%;
+  background: linear-gradient(180deg, #10123f, #07081d);
+  border: 3px solid #2a3cff;
+  border-radius: 14px;
+  box-shadow: 0 0 24px rgba(42, 60, 255, 0.45), inset 0 0 30px rgba(42, 60, 255, 0.15);
+}
+
+.marquee h1 {
+  font-size: clamp(18px, 5vw, 30px);
+  color: #ffe600;
+  text-shadow: 0 0 12px rgba(255, 230, 0, 0.8), 3px 3px 0 #7a2f00;
+  letter-spacing: 2px;
+}
+
+.marquee h1 span { color: #7f9bff; }
+
+.credit {
+  margin-top: 10px;
+  font-size: 8px;
+  color: #8a8fff;
+  letter-spacing: 1px;
+}
+
+.screen {
+  width: 100%;
+  background: #000;
+  border: 4px solid #141c78;
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(20, 28, 120, 0.8), inset 0 0 60px rgba(0, 0, 40, 0.9);
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+canvas {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  image-rendering: auto;
+  border-radius: 6px;
+  touch-action: none;
+  cursor: pointer;
+}
+
+.controls-bar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.controls-bar button,
+.controls-bar .back {
+  font-family: inherit;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #ffe600;
+  background: #0a0c2e;
+  border: 2px solid #ffe600;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 0 10px rgba(255, 230, 0, 0.25);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.controls-bar button:active,
+.controls-bar .back:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 4px rgba(255, 230, 0, 0.4);
+}
+
+.controls-bar .back { color: #7f9bff; border-color: #7f9bff; }
+
+/* on-screen d-pad — only for touch devices */
+#dpad {
+  display: none;
+  grid-template-columns: repeat(3, 64px);
+  grid-template-rows: repeat(2, 64px);
+  gap: 8px;
+  margin-top: 4px;
+}
+
+#dpad button {
+  font-size: 18px;
+  color: #e8e8ff;
+  background: linear-gradient(180deg, #1a1c4f, #0a0b26);
+  border: 2px solid #2a3cff;
+  border-radius: 12px;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+#dpad button:active { background: #2a3cff; }
+
+#dpad button[data-dir="up"]    { grid-column: 2; grid-row: 1; }
+#dpad button[data-dir="left"]  { grid-column: 1; grid-row: 2; }
+#dpad button[data-dir="down"]  { grid-column: 2; grid-row: 2; }
+#dpad button[data-dir="right"] { grid-column: 3; grid-row: 2; }
+
+@media (pointer: coarse) {
+  #dpad { display: grid; }
+}
+
+.howto {
+  width: 100%;
+  background: #05061a;
+  border: 2px solid #141c78;
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+.howto h2 {
+  font-size: 11px;
+  color: #ffe600;
+  margin-bottom: 14px;
+  letter-spacing: 2px;
+}
+
+.howto ul { list-style: none; }
+
+.howto li {
+  font-size: 8px;
+  line-height: 2.1;
+  color: #b9b9e8;
+}
+
+.howto strong { color: #fff; }
+
+footer {
+  text-align: center;
+  font-size: 7px;
+  line-height: 2.2;
+  color: #55557f;
+}
+
+footer a { color: #7f9bff; text-decoration: none; }

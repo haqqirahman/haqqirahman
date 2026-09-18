@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>PAC-MAN ARCADE — Haqqi Rahman</title>
+  <meta name="description" content="Playable Pac-Man arcade game — collect the coins, avoid the ghosts, and don't die!" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="cabinet">
+    <header class="marquee">
+      <h1>PAC-MAN <span>ARCADE</span></h1>
+      <p class="credit">haqqirahman.github.io &nbsp;·&nbsp; player 1 ready</p>
+    </header>
+
+    <div class="screen">
+      <canvas id="game" width="560" height="700" aria-label="Pac-Man game"></canvas>
+    </div>
+
+    <div class="controls-bar">
+      <button id="mute" type="button" aria-label="Toggle sound">🔊 SUARA ON</button>
+      <a class="back" href="https://github.com/haqqirahman">⬅ KEMBALI KE PROFIL</a>
+    </div>
+
+    <div id="dpad" aria-hidden="true">
+      <button data-dir="up" type="button">▲</button>
+      <button data-dir="left" type="button">◀</button>
+      <button data-dir="right" type="button">▶</button>
+      <button data-dir="down" type="button">▼</button>
+    </div>
+
+    <section class="howto">
+      <h2>CARA MAIN</h2>
+      <ul>
+        <li>🍽️ Makan semua <strong>coin</strong> di labirin untuk menang.</li>
+        <li>👻 <strong>Hindari 4 hantu</strong> — Blinky, Pinky, Inky, Clyde. Kalau tersentuh, kamu mati!</li>
+        <li>🔵 Ambil <strong>power pellet</strong> besar agar hantu biru dan bisa dimakan (200 · 400 · 800 · 1600 poin).</li>
+        <li>🍒 Bonus buah ceri muncul di tengah labirin.</li>
+        <li>⌨️ <strong>Komputer:</strong> panah / WASD · <strong>P</strong> pause · <strong>M</strong> suara. <strong>HP:</strong> swipe layar atau tombol arah.</li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>Dibuat dengan ❤️ + vanilla JavaScript — tanpa library, tanpa aset gambar.</p>
+      <p><a href="https://github.com/haqqirahman/haqqirahman">github.com/haqqirahman</a></p>
+    </footer>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 220" width="820" height="220" role="img" aria-label="Pac-Man Arcade — click to play">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b0d33"/>
+      <stop offset="1" stop-color="#04040f"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="2" y="2" width="816" height="216" rx="18" fill="url(#bg)" stroke="#2a3cff" stroke-width="3"/>
+  <rect x="10" y="10" width="800" height="200" rx="12" fill="none" stroke="#141c78" stroke-width="1"/>
+
+  <text x="410" y="52" text-anchor="middle" font-family="'Press Start 2P','Courier New',monospace" font-size="30" fill="#ffe600" letter-spacing="4">PAC-MAN ARCADE</text>
+  <text x="410" y="80" text-anchor="middle" font-family="'Press Start 2P','Courier New',monospace" font-size="11" fill="#7f9bff" letter-spacing="2">&#9733; HAQQIRAHMAN &#183; PLAYABLE GAME &#9733;</text>
+
+  <!-- coin row : each dot vanishes when Pac-Man eats it, then resets -->
+  <g fill="#ffb8ae">
+    <circle cx="120" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.18085;0.18285;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="160" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.2234;0.2254;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="200" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.26596;0.26796;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="240" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.30851;0.31051;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="280" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.35106;0.35306;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="320" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.39362;0.39562;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="360" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.43617;0.43817;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="400" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.47872;0.48072;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="440" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.52128;0.52328;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="480" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.56383;0.56583;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="520" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.60638;0.60838;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="560" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.64894;0.65094;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="600" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.69149;0.69349;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="640" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.73404;0.73604;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="680" cy="118" r="4"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;0.7766;0.7786;0.97;1" dur="8s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <!-- Pac-Man (radius 25 pie, mouth open to the right) -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" from="-60 118" to="880 118" dur="8s" repeatCount="indefinite"/>
+    <path d="M0,0 L20.7,-14.2 A25,25 0 1 0 20.7,14.2 Z" fill="#ffe600"/>
+  </g>
+
+  <!-- the four ghosts, chasing right behind -->
+  <g transform="translate(-160,118)">
+    <animateTransform attributeName="transform" type="translate" from="-160 118" to="780 118" dur="8s" repeatCount="indefinite" begin="0.5s"/>
+    <g>
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 -4;0 0" dur="0.5s" repeatCount="indefinite"/>
+      <path d="M-18,18 L-18,0 A18,18 0 0 1 18,0 L18,18 L12,12 L6,18 L0,12 L-6,18 L-12,12 Z" fill="#ff0000"/>
+      <circle cx="-6" cy="-4" r="5.5" fill="#fff"/><circle cx="6" cy="-4" r="5.5" fill="#fff"/>
+      <circle cx="-4" cy="-4" r="2.6" fill="#1b1bd0"/><circle cx="8" cy="-4" r="2.6" fill="#1b1bd0"/>
+    </g>
+  </g>
+  <g transform="translate(0,0)">
+    <animateTransform attributeName="transform" type="translate" from="-160 118" to="780 118" dur="8s" repeatCount="indefinite" begin="0.95s"/>
+    <g>
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 -4;0 0" dur="0.45s" repeatCount="indefinite" begin="-0.2s"/>
+      <path d="M-18,18 L-18,0 A18,18 0 0 1 18,0 L18,18 L12,12 L6,18 L0,12 L-6,18 L-12,12 Z" fill="#ffb8ff"/>
+      <circle cx="-6" cy="-4" r="5.5" fill="#fff"/><circle cx="6" cy="-4" r="5.5" fill="#fff"/>
+      <circle cx="-4" cy="-4" r="2.6" fill="#1b1bd0"/><circle cx="8" cy="-4" r="2.6" fill="#1b1bd0"/>
+    </g>
+  </g>
+  <g transform="translate(0,0)">
+    <animateTransform attributeName="transform" type="translate" from="-160 118" to="780 118" dur="8s" repeatCount="indefinite" begin="1.4s"/>
+    <g>
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 -4;0 0" dur="0.55s" repeatCount="indefinite" begin="-0.1s"/>
+      <path d="M-18,18 L-18,0 A18,18 0 0 1 18,0 L18,18 L12,12 L6,18 L0,12 L-6,18 L-12,12 Z" fill="#00ffff"/>
+      <circle cx="-6" cy="-4" r="5.5" fill="#fff"/><circle cx="6" cy="-4" r="5.5" fill="#fff"/>
+      <circle cx="-4" cy="-4" r="2.6" fill="#1b1bd0"/><circle cx="8" cy="-4" r="2.6" fill="#1b1bd0"/>
+    </g>
+  </g>
+  <g transform="translate(0,0)">
+    <animateTransform attributeName="transform" type="translate" from="-160 118" to="780 118" dur="8s" repeatCount="indefinite" begin="1.85s"/>
+    <g>
+      <animateTransform attributeName="transform" type="translate" values="0 0;0 -4;0 0" dur="0.5s" repeatCount="indefinite" begin="-0.3s"/>
+      <path d="M-18,18 L-18,0 A18,18 0 0 1 18,0 L18,18 L12,12 L6,18 L0,12 L-6,18 L-12,12 Z" fill="#ffb852"/>
+      <circle cx="-6" cy="-4" r="5.5" fill="#fff"/><circle cx="6" cy="-4" r="5.5" fill="#fff"/>
+      <circle cx="-4" cy="-4" r="2.6" fill="#1b1bd0"/><circle cx="8" cy="-4" r="2.6" fill="#1b1bd0"/>
+    </g>
+  </g>
+
+  <!-- blinking call to action -->
+  <text x="410" y="186" text-anchor="middle" font-family="'Press Start 2P','Courier New',monospace" font-size="14" fill="#ffe600" letter-spacing="2">&#9654; INSERT COIN &#8212; CLICK TO PLAY
+    <animate attributeName="opacity" values="1;0.15;1" dur="1.1s" repeatCount="indefinite"/>
+  </text>
+</svg>
