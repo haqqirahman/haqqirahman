@@ -78,7 +78,7 @@ AI-assisted CCTV monitoring environment using:
 <div align="center">
 
 <img
-  src="https://raw.githubusercontent.com/haqqirahman/haqqirahman/output/pacman-live.svg"
+  src="https://raw.githubusercontent.com/haqqirahman/haqqirahman/output/pacman-maze.svg"
   alt="Pac-Man Contribution Graph"
   width="100%"
 />

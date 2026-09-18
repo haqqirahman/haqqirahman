@@ -12,26 +12,20 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
   const gap = 4;
   const step = cell + gap; // 15
   const left = 32;
-  const top = 80;
+  const top = 56;
   const days = 7;
 
   const weekCount = Math.max(1, weeks.length);
   const graphWidth = weekCount * step;
   const width = graphWidth + left * 2;
-  const height = 250;
+  const height = top + days * step + 32; // ~193px compact arcade frame
 
   const palette = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"];
 
+  // Grid squares
   let squares = "";
-  const route = [];
-
   weeks.forEach((week, wi) => {
-    const ordered = wi % 2 === 0
-      ? week.contributionDays
-      : [...week.contributionDays].reverse();
-
-    ordered.forEach((day, oi) => {
-      const di = wi % 2 === 0 ? oi : (days - 1 - oi);
+    week.contributionDays.forEach((day, di) => {
       const x = left + wi * step;
       const y = top + di * step;
       const count = day.contributionCount ?? 0;
@@ -43,116 +37,150 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
       if (count >= 10) level = 4;
 
       squares += `
-        <rect x="${x}" y="${y}" width="${cell}" height="${cell}" rx="2.5"
+        <rect x="${x}" y="${y}" width="${cell}" height="${cell}" rx="2"
               fill="${palette[level]}" opacity="0.95">
           <title>${esc(day.date)} — ${count} contributions</title>
         </rect>`;
-
-      route.push([x + cell / 2, y + cell / 2]);
     });
   });
 
-  // Closed circuit: bottom corridor runway returning back to start point
-  if (route.length > 1) {
-    const [lastX] = route[route.length - 1];
-    const [firstX, firstY] = route[0];
-    const bottomCorridorY = top + days * step + 8; // y = 193
+  // Helper to get pixel center coordinate for cell (col, row)
+  const pt = (c, r) => [left + c * step + cell / 2, top + r * step + cell / 2];
 
-    route.push([lastX, bottomCorridorY]);
-    route.push([firstX - 16, bottomCorridorY]);
-    route.push([firstX - 16, firstY]);
-    route.push([firstX, firstY]);
-  }
+  // Dynamic labyrinth route with combined turns, horizontal sweeps, dives, and loops (not a simple vertical snake!)
+  const routePoints = [
+    pt(0, 0),
+    pt(6, 0),
+    pt(6, 2),
+    pt(14, 2),
+    pt(14, 4),
+    pt(8, 4),
+    pt(8, 6),
+    pt(20, 6),
+    pt(20, 3),
+    pt(25, 3),
+    pt(25, 1),
+    pt(32, 1),
+    pt(32, 3),
+    pt(38, 3),
+    pt(38, 0),
+    pt(46, 0),
+    pt(46, 3),
+    pt(52, 3),
+    pt(52, 6),
+    pt(42, 6),
+    pt(42, 4),
+    pt(34, 4),
+    pt(34, 6),
+    pt(24, 6),
+    pt(24, 4),
+    pt(16, 4),
+    pt(16, 1),
+    pt(2, 1),
+    pt(2, 5),
+    pt(0, 5),
+    pt(0, 0)
+  ];
 
-  const pathD = route.length
-    ? route.map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`).join(" ") + " Z"
-    : `M ${left} ${top} Z`;
+  const pathD = routePoints.map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`).join(" ") + " Z";
 
-  const dur = "48s";
+  const dur = "54s";
 
-  // Coordinates for Power Pellets (4 corners)
-  const x1 = left + cell / 2;
-  const y1 = top + cell / 2;
-  const x2 = left + (weekCount - 1) * step + cell / 2;
-  const y2 = top + 6 * step + cell / 2;
-  const midX = width / 2;
+  // Authentic white/silver maze walls matching the user's reference image
+  const gx = (c) => left + c * step - gap / 2;
+  const gy = (r) => top + r * step - gap / 2;
 
-  // Labyrinth Neon Obstacle Walls (Halangan Arcade Klasik)
   const mazeWalls = `
-    <!-- OUTER MAZE DOUBLE BORDER (NEON BLUE) -->
-    <rect x="${left - 12}" y="${top - 12}" width="${graphWidth + 24}" height="${days * step + 32}" rx="8"
-          fill="none" stroke="#1d4ed8" stroke-width="2.5" opacity="0.85"/>
-    <rect x="${left - 15}" y="${top - 15}" width="${graphWidth + 30}" height="${days * step + 38}" rx="11"
-          fill="none" stroke="#1e40af" stroke-width="1.2" opacity="0.45"/>
+    <!-- Labyrinth Walls (White / Silver with rounded bends like the reference image) -->
+    <g fill="none" stroke="#e2e8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.88">
+      <!-- Section 1 (Left: cols 0 - 15) -->
+      <path d="M ${gx(5)} ${top - 4} L ${gx(5)} ${gy(3)} L ${gx(1)} ${gy(3)}"/>
+      <path d="M ${gx(7)} ${gy(1)} L ${gx(13)} ${gy(1)} L ${gx(13)} ${gy(4)} L ${gx(7)} ${gy(4)} L ${gx(7)} ${gy(5)}"/>
+      <path d="M ${gx(1)} ${gy(5)} L ${gx(5)} ${gy(5)}"/>
+      <path d="M ${gx(9)} ${gy(6)} L ${gx(15)} ${gy(6)}"/>
 
-    <!-- INNER OBSTACLES & DIVIDERS (HALANGAN) -->
-    <!-- Top dividers -->
-    <path d="M ${left + 4 * step} ${top - 6} L ${left + 14 * step} ${top - 6}" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
-    <path d="M ${left + 20 * step} ${top - 6} L ${left + 32 * step} ${top - 6}" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
-    <path d="M ${left + 38 * step} ${top - 6} L ${left + 48 * step} ${top - 6}" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+      <!-- Section 2 (Center-Left: cols 15 - 26) -->
+      <path d="M ${gx(15)} ${gy(2)} L ${gx(24)} ${gy(2)}"/>
+      <path d="M ${gx(20)} ${gy(2)} L ${gx(20)} ${gy(5)}"/>
+      <path d="M ${gx(17)} ${gy(4)} L ${gx(24)} ${gy(4)}"/>
+      <path d="M ${gx(22)} ${gy(5)} L ${gx(25)} ${gy(5)}"/>
 
-    <!-- Bottom runway divider -->
-    <path d="M ${left - 6} ${top + days * step} L ${left + graphWidth + 6} ${top + days * step}"
-          stroke="#1d4ed8" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.6"/>
+      <!-- Section 3 (Center Arch / Divider: cols 26 - 28) -->
+      <path d="M ${gx(26)} ${top - 6} L ${gx(26)} ${gy(2)}"/>
+      <path d="M ${gx(28)} ${top - 6} L ${gx(28)} ${gy(2)}"/>
+      <path d="M ${gx(25)} ${gy(3)} L ${gx(29)} ${gy(3)}"/>
+      <path d="M ${gx(27)} ${gy(4)} L ${gx(27)} ${gy(6)}"/>
 
-    <!-- GHOST HOUSE / BASE (CENTER BOTTOM) -->
-    <g transform="translate(${midX - 35}, ${top + days * step + 2})">
-      <rect x="0" y="0" width="70" height="14" rx="3" fill="#0b0f19" stroke="#2563eb" stroke-width="1.5"/>
-      <!-- Pink Ghost Gate -->
-      <line x1="22" y1="0" x2="48" y2="0" stroke="#f472b6" stroke-width="2" stroke-dasharray="3 2"/>
-      <text x="35" y="10" fill="#60a5fa" font-size="8" font-family="monospace" font-weight="bold" text-anchor="middle">GHOSTS</text>
+      <!-- Section 4 (Center-Right: cols 28 - 40) -->
+      <path d="M ${gx(30)} ${gy(2)} L ${gx(37)} ${gy(2)}"/>
+      <path d="M ${gx(33)} ${gy(2)} L ${gx(33)} ${gy(5)}"/>
+      <path d="M ${gx(30)} ${gy(4)} L ${gx(37)} ${gy(4)}"/>
+      <path d="M ${gx(35)} ${gy(5)} L ${gx(39)} ${gy(5)}"/>
+
+      <!-- Section 5 (Right: cols 40 - 53) -->
+      <path d="M ${gx(41)} ${top - 4} L ${gx(41)} ${gy(3)} L ${gx(45)} ${gy(3)}"/>
+      <path d="M ${gx(43)} ${gy(1)} L ${gx(50)} ${gy(1)} L ${gx(50)} ${gy(4)}"/>
+      <path d="M ${gx(45)} ${gy(5)} L ${gx(52)} ${gy(5)}"/>
+      <path d="M ${gx(48)} ${gy(2)} L ${gx(48)} ${gy(6)}"/>
     </g>
   `;
 
-  // Pellets / Coins along the bottom runway corridor
-  let corridorCoins = "";
-  for (let cx = left + 10; cx < left + graphWidth - 10; cx += 22) {
-    corridorCoins += `<circle cx="${cx}" cy="${top + days * step + 8}" r="2" fill="#ffd60a" opacity="0.85"/>`;
-  }
+  // Months labels along top matching reference image
+  const monthLabels = [
+    { name: "Apr", col: 1 },
+    { name: "May", col: 5 },
+    { name: "Jun", col: 10 },
+    { name: "Jul", col: 14 },
+    { name: "Aug", col: 18 },
+    { name: "Sep", col: 23 },
+    { name: "Oct", col: 27 },
+    { name: "Nov", col: 32 },
+    { name: "Dec", col: 36 },
+    { name: "Jan", col: 40 },
+    { name: "Feb", col: 45 },
+    { name: "Mar", col: 49 }
+  ].map(m => `<text x="${left + m.col * step}" y="${top - 12}" fill="#64748b" font-size="10" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif">${m.name}</text>`).join("");
 
-  // 4 Power Pellets (Bisa Jadi Kuat)
+  // Power Pellets in the 4 corners
+  const [p1x, p1y] = pt(0, 0);
+  const [p2x, p2y] = pt(Math.min(52, weekCount - 1), 0);
+  const [p3x, p3y] = pt(0, 6);
+  const [p4x, p4y] = pt(Math.min(52, weekCount - 1), 6);
+
   const powerPellets = `
-    <!-- Top-Left Energizer (Eaten at ~18s to trigger Power Mode) -->
-    <g>
-      <circle cx="${x1}" cy="${y1}" r="5" fill="#ffd60a">
-        <animate attributeName="r" values="3.5; 6; 3.5" dur="0.5s" repeatCount="indefinite"/>
-        <animate attributeName="opacity"
-                 values="1; 1; 0; 0; 0; 0; 1"
-                 keyTimes="0; 0.375; 0.380; 0.900; 0.950; 0.999; 1"
-                 dur="${dur}" repeatCount="indefinite"/>
-      </circle>
-    </g>
-    <!-- Bottom-Left Energizer -->
-    <circle cx="${x1}" cy="${y2}" r="5" fill="#ffd60a">
-      <animate attributeName="r" values="3.5; 6; 3.5" dur="0.5s" repeatCount="indefinite"/>
+    <!-- 4 Pulsing Power Pellets at maze junctions -->
+    <circle cx="${p1x}" cy="${p1y}" r="4.5" fill="#ffd60a">
+      <animate attributeName="r" values="3; 5.5; 3" dur="0.5s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0.4; 1; 0.4" dur="0.5s" repeatCount="indefinite"/>
     </circle>
-    <!-- Top-Right Energizer -->
-    <circle cx="${x2}" cy="${y1}" r="5" fill="#ffd60a">
-      <animate attributeName="r" values="3.5; 6; 3.5" dur="0.5s" repeatCount="indefinite"/>
+    <circle cx="${p2x}" cy="${p2y}" r="4.5" fill="#ffd60a">
+      <animate attributeName="r" values="3; 5.5; 3" dur="0.5s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0.4; 1; 0.4" dur="0.5s" repeatCount="indefinite"/>
     </circle>
-    <!-- Bottom-Right Energizer -->
-    <circle cx="${x2}" cy="${y2}" r="5" fill="#ffd60a">
-      <animate attributeName="r" values="3.5; 6; 3.5" dur="0.5s" repeatCount="indefinite"/>
+    <circle cx="${p3x}" cy="${p3y}" r="4.5" fill="#ffd60a">
+      <animate attributeName="r" values="3; 5.5; 3" dur="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.4; 1; 0.4" dur="0.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="${p4x}" cy="${p4y}" r="4.5" fill="#ffd60a">
+      <animate attributeName="r" values="3; 5.5; 3" dur="0.5s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0.4; 1; 0.4" dur="0.5s" repeatCount="indefinite"/>
     </circle>
   `;
 
-  // Ghost generator with Frightened (Blue) Mode, Flashing Warning, and Normal mode
+  // Ghost generator with Scared Blue state when Pac-Man is Strong
   function renderSmartGhost({ name, defaultColor, beginOffset }) {
     const colorValues = `${defaultColor}; ${defaultColor}; #1d4ed8; #1d4ed8; #ffffff; #1d4ed8; #ffffff; #1d4ed8; ${defaultColor}; ${defaultColor}`;
-    const colorKeyTimes = `0; 0.374; 0.375; 0.583; 0.604; 0.625; 0.646; 0.666; 0.667; 1`;
+    const colorKeyTimes = `0; 0.350; 0.351; 0.550; 0.575; 0.600; 0.625; 0.650; 0.651; 1`;
 
     return `
     <!-- Ghost: ${name} -->
     <g>
-      <!-- Ghost Root with Floating Bobbing -->
+      <!-- Ghost Bobbing -->
       <g>
         <animateTransform attributeName="transform" type="translate"
           values="0 -1; 0 1; 0 -1" dur="0.4s" repeatCount="indefinite" additive="sum"/>
 
-        <!-- Ghost Body with Animated Tentacles & State Color Switching -->
+        <!-- Ghost Body with Animated Wavy Skirt & Color State -->
         <path d="M -5.5 -1 A 5.5 5.5 0 0 1 5.5 -1 L 5.5 5.5 Q 3.7 3.5 1.8 5.5 Q 0 3.5 -1.8 5.5 Q -3.7 3.5 -5.5 5.5 Z" fill="${defaultColor}">
           <animate attributeName="fill"
             values="${colorValues}" keyTimes="${colorKeyTimes}" dur="${dur}" repeatCount="indefinite"/>
@@ -168,7 +196,7 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
         <g>
           <animate attributeName="opacity"
             values="1; 1; 0; 0; 1; 1"
-            keyTimes="0; 0.374; 0.375; 0.666; 0.667; 1"
+            keyTimes="0; 0.350; 0.351; 0.650; 0.651; 1"
             dur="${dur}" repeatCount="indefinite"/>
           <ellipse cx="-2" cy="-1.5" rx="2" ry="2.4" fill="#ffffff"/>
           <ellipse cx="2.4" cy="-1.5" rx="2" ry="2.4" fill="#ffffff"/>
@@ -176,11 +204,11 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
           <ellipse cx="3.2" cy="-1.5" rx="1.1" ry="1.4" fill="#1e3a8a"/>
         </g>
 
-        <!-- Frightened Face (Small yellow eyes & wavy mouth) -->
+        <!-- Frightened Face (Scared Ghost expression: small yellow eyes & wavy mouth) -->
         <g opacity="0">
           <animate attributeName="opacity"
             values="0; 0; 1; 1; 0; 0"
-            keyTimes="0; 0.374; 0.375; 0.666; 0.667; 1"
+            keyTimes="0; 0.350; 0.351; 0.650; 0.651; 1"
             dur="${dur}" repeatCount="indefinite"/>
           <rect x="-3" y="-2.5" width="2" height="2" fill="#ffd60a" rx="0.5"/>
           <rect x="1.5" y="-2.5" width="2" height="2" fill="#ffd60a" rx="0.5"/>
@@ -189,132 +217,57 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
         </g>
       </g>
 
-      <!-- Path Motion along Maze without rotation (keeps ghosts upright) -->
+      <!-- Path Motion along Maze -->
       <animateMotion dur="${dur}" repeatCount="indefinite" begin="${beginOffset}" path="${pathD}"/>
     </g>`;
   }
 
+  // Spaced out along the maze
   const ghosts = [
-    renderSmartGhost({ name: "Blinky (Red)",   defaultColor: "#ff0000", beginOffset: "-0.80s" }),
-    renderSmartGhost({ name: "Pinky (Pink)",   defaultColor: "#ffb8de", beginOffset: "-0.54s" }),
-    renderSmartGhost({ name: "Inky (Cyan)",    defaultColor: "#00ffff", beginOffset: "-0.28s" }),
-    renderSmartGhost({ name: "Clyde (Orange)", defaultColor: "#ffb847", beginOffset: "0s" })
+    renderSmartGhost({ name: "Blinky (Red)",   defaultColor: "#ff0000", beginOffset: "-0.90s" }),
+    renderSmartGhost({ name: "Pinky (Pink)",   defaultColor: "#ffb8de", beginOffset: "-1.80s" }),
+    renderSmartGhost({ name: "Inky (Cyan)",    defaultColor: "#00ffff", beginOffset: "-2.70s" }),
+    renderSmartGhost({ name: "Clyde (Orange)", defaultColor: "#ffb847", beginOffset: "-3.60s" })
   ].join("");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg"
      width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"
-     role="img" aria-label="Authentic Pac-Man Arcade Contribution Graph for ${esc(username)}">
+     role="img" aria-label="Authentic Pac-Man Maze Contribution Graph for ${esc(username)}">
   <style>
-    .bg { fill: #080c14; }
-    .title {
-      fill: #f0f6fc;
-      font: 700 16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      letter-spacing: 0.5px;
-    }
-    .score-lbl {
-      fill: #e3b341;
-      font: 700 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-      letter-spacing: 1px;
-    }
-    .score-val {
-      fill: #ffffff;
-      font: 700 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    }
-    .meta {
-      fill: #8b949e;
-      font: 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    }
-    .mode-badge {
-      font: 700 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-      letter-spacing: 1.5px;
-    }
+    .bg { fill: #0d1117; }
     .ready-banner {
       fill: #ffeb3b;
-      font: 900 18px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-      letter-spacing: 3px;
-      filter: drop-shadow(0 0 6px rgba(255, 235, 59, 0.7));
+      font: 900 16px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      letter-spacing: 2px;
     }
     @media (prefers-color-scheme: light) {
       .bg { fill: #ffffff; }
-      .title { fill: #1f2328; }
-      .meta { fill: #57606a; }
-      .score-lbl { fill: #b08800; }
-      .score-val { fill: #1f2328; }
     }
   </style>
 
-  <!-- Background Arcade Cabinet -->
-  <rect class="bg" x="0" y="0" width="100%" height="100%" rx="14"/>
-  <rect x="1" y="1" width="${width - 2}" height="${height - 2}" rx="14" fill="none" stroke="#21262d" stroke-width="1.5"/>
+  <!-- Background Canvas -->
+  <rect class="bg" x="0" y="0" width="100%" height="100%" rx="8"/>
 
-  <!-- ARCADE HEADER -->
-  <text class="title" x="${left}" y="28">🕹️ PAC-MAN ARCADE: CONTRIBUTION EDITION</text>
-  
-  <text class="score-lbl" x="${left}" y="48">
-    1UP <tspan class="score-val">${totalContributions * 10}</tspan>
-    &#160;&#160;&#160;&#160;HIGH SCORE <tspan class="score-val">${Math.max(totalContributions * 10, 9999)}</tspan>
-  </text>
-  
-  <!-- REAL-TIME STATUS BADGE (Changes between CHASE, POWER UP, and RESPAWN) -->
-  <g transform="translate(${midX}, 44)">
-    <!-- Status 1: CHASE MODE (0 - 18s and 32 - 40s) -->
-    <text class="mode-badge" x="0" y="0" fill="#f87171" text-anchor="middle" opacity="1">
-      <animate attributeName="opacity"
-        values="1; 1; 0; 0; 1; 1; 0; 0; 1"
-        keyTimes="0; 0.374; 0.375; 0.666; 0.667; 0.833; 0.834; 0.999; 1"
-        dur="${dur}" repeatCount="indefinite"/>
-      ⚠️ GHOST CHASE ACTIVE
-    </text>
-
-    <!-- Status 2: POWER MODE! (18s - 32s) -->
-    <text class="mode-badge" x="0" y="0" fill="#38bdf8" text-anchor="middle" opacity="0">
-      <animate attributeName="opacity"
-        values="0; 0; 1; 1; 0; 0"
-        keyTimes="0; 0.374; 0.375; 0.666; 0.667; 1"
-        dur="${dur}" repeatCount="indefinite"/>
-      ⚡ POWER PELLET: HUNT THE GHOSTS! ⚡
-    </text>
-
-    <!-- Status 3: READY / RESPAWN (40s - 48s) -->
-    <text class="mode-badge" x="0" y="0" fill="#facc15" text-anchor="middle" opacity="0">
-      <animate attributeName="opacity"
-        values="0; 0; 1; 1; 0"
-        keyTimes="0; 0.833; 0.834; 0.999; 1"
-        dur="${dur}" repeatCount="indefinite"/>
-      ✨ RESPAWNING... GET READY! ✨
-    </text>
-  </g>
-
-  <text class="score-lbl" x="${width - left}" y="28" text-anchor="end">
-    PLAYER <tspan class="score-val">${esc(username.toUpperCase())}</tspan>
-  </text>
-  <text class="meta" x="${width - left}" y="48" text-anchor="end">
-    CONTRIBUTIONS: ${totalContributions}
-  </text>
-
-  <!-- Labyrinth Neon Maze Walls (Halangan) -->
-  ${mazeWalls}
-
-  <!-- Corridor Pellets (Coins) -->
-  ${corridorCoins}
+  <!-- Month Labels along Top -->
+  ${monthLabels}
 
   <!-- Contribution Heatmap Grid -->
   ${squares}
 
-  <!-- 4 Pulsing Power Pellets (Bisa Jadi Kuat) -->
+  <!-- Labyrinth Maze Walls (Halangan) -->
+  ${mazeWalls}
+
+  <!-- Pulsing Corner Power Pellets -->
   ${powerPellets}
 
   <!-- +200 BONUS SCORE POPUP (When eating ghost during power mode at ~22s) -->
   <g opacity="0">
     <animate attributeName="opacity"
       values="0; 0; 1; 1; 0; 0"
-      keyTimes="0; 0.44; 0.46; 0.52; 0.54; 1"
+      keyTimes="0; 0.40; 0.42; 0.48; 0.50; 1"
       dur="${dur}" repeatCount="indefinite"/>
-    <animateTransform attributeName="transform" type="translate"
-      values="${x1 + 40} ${y1 + 10}; ${x1 + 40} ${y1 - 12}"
-      keyTimes="0; 1" dur="1.2s" begin="21.5s" repeatCount="indefinite"/>
-    <text x="0" y="0" fill="#38bdf8" font-size="12" font-family="monospace" font-weight="900" text-anchor="middle">
+    <text x="${left + 26 * step}" y="${top + 2 * step}" fill="#38bdf8" font-size="11" font-family="monospace" font-weight="900" text-anchor="middle">
       +200
     </text>
   </g>
@@ -323,27 +276,27 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
 
   <!-- PAC-MAN (Leader, with Power Aura, Chomp, Death Spin & Respawn) -->
   <g>
-    <!-- Master Motion along Maze Path -->
-    <animateMotion dur="${dur}" repeatCount="indefinite" rotate="auto" begin="-1.15s" path="${pathD}"/>
+    <!-- Master Motion along Dynamic Maze Path -->
+    <animateMotion dur="${dur}" repeatCount="indefinite" rotate="auto" begin="0s" path="${pathD}"/>
 
-    <!-- Death Shrink & Spin Transform (At 40s - 43s) -->
+    <!-- Death Shrink & Spin Transform (At 42s - 45s) -->
     <g>
-      <!-- Scale Animation: normal 1 -> shrinks to 0 at death (40s - 43s) -> respawns at 45s -->
+      <!-- Scale Animation: normal 1 -> shrinks to 0 at death (42s - 45s) -> respawns at 48s -->
       <animateTransform attributeName="transform" type="scale"
         values="1; 1; 1; 0.1; 0; 0; 1; 1"
-        keyTimes="0; 0.833; 0.835; 0.880; 0.885; 0.937; 0.940; 1"
+        keyTimes="0; 0.777; 0.780; 0.820; 0.825; 0.880; 0.885; 1"
         dur="${dur}" repeatCount="indefinite" additive="sum"/>
       
       <animateTransform attributeName="transform" type="rotate"
         values="0; 0; 0; 1080; 1080; 0; 0"
-        keyTimes="0; 0.833; 0.835; 0.880; 0.937; 0.940; 1"
+        keyTimes="0; 0.777; 0.780; 0.820; 0.880; 0.885; 1"
         dur="${dur}" repeatCount="indefinite" additive="sum"/>
 
-      <!-- Golden Power Aura Ring (Active when Pac-Man is Strong: 18s - 32s) -->
-      <circle cx="0" cy="0" r="9" fill="none" stroke="#ffd60a" stroke-width="2" stroke-dasharray="3 2" opacity="0">
+      <!-- Golden Power Aura Ring (Active when Pac-Man is Strong: 19s - 35s) -->
+      <circle cx="0" cy="0" r="8.5" fill="none" stroke="#ffd60a" stroke-width="1.8" stroke-dasharray="3 2" opacity="0">
         <animate attributeName="opacity"
           values="0; 0; 0.9; 0.9; 0; 0"
-          keyTimes="0; 0.374; 0.375; 0.666; 0.667; 1"
+          keyTimes="0; 0.350; 0.351; 0.650; 0.651; 1"
           dur="${dur}" repeatCount="indefinite"/>
         <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/>
       </circle>
@@ -352,7 +305,7 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
       <circle cx="0" cy="0" r="${cell * 0.48}" fill="#ffd60a"/>
 
       <!-- Chomping Animated Mouth -->
-      <path d="M 0 0 L ${cell * 0.65} ${-cell * 0.4} L ${cell * 0.65} ${cell * 0.4} Z" fill="#080c14">
+      <path d="M 0 0 L ${cell * 0.65} ${-cell * 0.4} L ${cell * 0.65} ${cell * 0.4} Z" fill="#0d1117">
         <animate attributeName="d"
           values="
             M 0 0 L ${cell * 0.65} ${-cell * 0.4} L ${cell * 0.65} ${cell * 0.4} Z;
@@ -366,55 +319,17 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
     </g>
   </g>
 
-  <!-- THE 4 GHOSTS (Blinky, Pinky, Inky, Clyde) -->
+  <!-- THE 4 GHOSTS (Blinky, Pinky, Inky, Clyde) traversing the labyrinth -->
   ${ghosts}
 
-  <!-- DEATH BURST SPARKS (At 42s when Pac-Man dies) -->
-  <g transform="translate(${x1 + 60}, ${y1 + 45})" opacity="0">
-    <animate attributeName="opacity"
-      values="0; 0; 1; 1; 0; 0"
-      keyTimes="0; 0.874; 0.875; 0.895; 0.896; 1"
-      dur="${dur}" repeatCount="indefinite"/>
-    <!-- 4 popping sparks -->
-    <circle cx="-5" cy="-5" r="1.5" fill="#facc15"/>
-    <circle cx="5"  cy="-5" r="1.5" fill="#facc15"/>
-    <circle cx="-5" cy="5"  r="1.5" fill="#facc15"/>
-    <circle cx="5"  cy="5"  r="1.5" fill="#facc15"/>
-  </g>
-
-  <!-- "READY!" ARCADE BANNER (Flashes at 44s - 47s during respawn) -->
-  <g transform="translate(${midX}, ${top + 45})" opacity="0">
+  <!-- "READY!" ARCADE BANNER (Flashes at 45s - 48s during respawn) -->
+  <g transform="translate(${left + 26 * step}, ${top + 3 * step})" opacity="0">
     <animate attributeName="opacity"
       values="0; 0; 1; 0.2; 1; 0.2; 1; 0; 0"
-      keyTimes="0; 0.916; 0.917; 0.935; 0.950; 0.965; 0.979; 0.980; 1"
+      keyTimes="0; 0.833; 0.834; 0.850; 0.865; 0.880; 0.890; 0.895; 1"
       dur="${dur}" repeatCount="indefinite"/>
-    <rect x="-60" y="-16" width="120" height="24" rx="4" fill="#0b0f19" stroke="#ffeb3b" stroke-width="1.5"/>
+    <rect x="-50" y="-14" width="100" height="20" rx="3" fill="#0b0f19" stroke="#ffeb3b" stroke-width="1.2"/>
     <text class="ready-banner" x="0" y="2" text-anchor="middle">READY!</text>
   </g>
-
-  <!-- ================= ARCADE FOOTER ================= -->
-  <!-- Lives counter (drops from 3 to 2 during death sequence at 42s) -->
-  <g transform="translate(${left}, ${height - 14})">
-    <text class="meta" x="0" y="0">LIVES:</text>
-    <circle cx="52" cy="-4" r="5" fill="#ffd60a"/>
-    <circle cx="68" cy="-4" r="5" fill="#ffd60a"/>
-    <!-- 3rd Life Pac-Man: disappears at death (42s) and returns at respawn (47s) -->
-    <circle cx="84" cy="-4" r="5" fill="#ffd60a">
-      <animate attributeName="opacity"
-        values="1; 1; 0; 0; 1; 1"
-        keyTimes="0; 0.875; 0.876; 0.979; 0.980; 1"
-        dur="${dur}" repeatCount="indefinite"/>
-    </circle>
-  </g>
-
-  <!-- Middle footer text -->
-  <text class="meta" x="${midX}" y="${height - 14}" text-anchor="middle">
-    🔴 BLINKY &#160; 🌸 PINKY &#160; 🔷 INKY &#160; 🟠 CLYDE &#160;•&#160; ${totalContributions} CONTRIBUTIONS
-  </text>
-
-  <!-- Right fruit bonus -->
-  <text class="meta" x="${width - left}" y="${height - 14}" text-anchor="end">
-    BONUS: 🍒 CHERRY (100 PTS)
-  </text>
 </svg>`;
 }
