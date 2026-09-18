@@ -7,6 +7,43 @@ function esc(value = "") {
     .replaceAll("'", "&apos;");
 }
 
+function renderGhost({ name, color, offset, dur, pathD }) {
+  const kp = `${(1 - offset).toFixed(4)}; 1; 0; ${(1 - offset).toFixed(4)}`;
+  const kt = `0; ${offset.toFixed(4)}; ${offset.toFixed(4)}; 1`;
+
+  return `
+  <!-- Ghost: ${name} -->
+  <g>
+    <g>
+      <!-- Bobbing / floating animation -->
+      <animateTransform attributeName="transform" type="translate"
+        values="0 -0.8; 0 0.8; 0 -0.8" dur="0.4s" repeatCount="indefinite" additive="sum"/>
+      
+      <!-- Ghost body with animated tentacles -->
+      <path fill="${color}" d="M -5.5 -1 A 5.5 5.5 0 0 1 5.5 -1 L 5.5 5.5 Q 3.7 3.5 1.8 5.5 Q 0 3.5 -1.8 5.5 Q -3.7 3.5 -5.5 5.5 Z">
+        <animate attributeName="d"
+          values="
+            M -5.5 -1 A 5.5 5.5 0 0 1 5.5 -1 L 5.5 5.5 Q 3.7 3.5 1.8 5.5 Q 0 3.5 -1.8 5.5 Q -3.7 3.5 -5.5 5.5 Z;
+            M -5.5 -1 A 5.5 5.5 0 0 1 5.5 -1 L 5.5 4 Q 3.7 6 1.8 4 Q 0 6 -1.8 4 Q -3.7 6 -5.5 4 Z;
+            M -5.5 -1 A 5.5 5.5 0 0 1 5.5 -1 L 5.5 5.5 Q 3.7 3.5 1.8 5.5 Q 0 3.5 -1.8 5.5 Q -3.7 3.5 -5.5 5.5 Z"
+          dur="0.25s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- Eyes (White Sclera) -->
+      <ellipse cx="-2" cy="-1.5" rx="2.1" ry="2.5" fill="#ffffff"/>
+      <ellipse cx="2.4" cy="-1.5" rx="2.1" ry="2.5" fill="#ffffff"/>
+
+      <!-- Pupils (Classic Arcade Blue) -->
+      <ellipse cx="-1.2" cy="-1.5" rx="1.1" ry="1.4" fill="#1e3a8a"/>
+      <ellipse cx="3.2" cy="-1.5" rx="1.1" ry="1.4" fill="#1e3a8a"/>
+    </g>
+
+    <!-- Path motion without rotation to keep ghosts upright -->
+    <animateMotion dur="${dur}" repeatCount="indefinite" calcMode="linear"
+                   keyPoints="${kp}" keyTimes="${kt}" path="${pathD}"/>
+  </g>`;
+}
+
 export function buildPacmanSvg({ username, totalContributions, weeks }) {
   const cell = 11;
   const gap = 4;
@@ -17,7 +54,7 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
 
   const graphWidth = Math.max(1, weeks.length) * step;
   const width = graphWidth + left * 2;
-  const height = 220;
+  const height = 230;
 
   const palette = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"];
 
@@ -51,64 +88,145 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
     });
   });
 
+  // Connect last point back to the first point via a perimeter corridor to form a continuous closed loop
+  if (route.length > 1) {
+    const [lastX, lastY] = route[route.length - 1];
+    const [firstX, firstY] = route[0];
+    const corridorY = top + days * step + 4; // Bottom runway corridor
+
+    route.push([lastX, corridorY]);
+    route.push([firstX - 14, corridorY]);
+    route.push([firstX - 14, firstY]);
+    route.push([firstX, firstY]);
+  }
+
   const pathD = route.length
-    ? route.map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x} ${y}`).join(" ")
-    : `M ${left} ${top}`;
+    ? route.map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`).join(" ") + " Z"
+    : `M ${left} ${top} Z`;
+
+  const duration = "56s";
+
+  // 4 Power Pellets at the 4 corners of the maze
+  const lastWeekX = left + (weeks.length - 1) * step + cell / 2;
+  const firstWeekX = left + cell / 2;
+  const topY = top + cell / 2;
+  const bottomY = top + 6 * step + cell / 2;
+
+  const powerPellets = `
+    <!-- Power Pellets (Corners) -->
+    <circle cx="${firstWeekX}" cy="${topY}" r="4" fill="#ffd60a">
+      <animate attributeName="r" values="3; 5.2; 3" dur="0.6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6; 1; 0.6" dur="0.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="${firstWeekX}" cy="${bottomY}" r="4" fill="#ffd60a">
+      <animate attributeName="r" values="3; 5.2; 3" dur="0.6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6; 1; 0.6" dur="0.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="${lastWeekX}" cy="${topY}" r="4" fill="#ffd60a">
+      <animate attributeName="r" values="3; 5.2; 3" dur="0.6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6; 1; 0.6" dur="0.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="${lastWeekX}" cy="${bottomY}" r="4" fill="#ffd60a">
+      <animate attributeName="r" values="3; 5.2; 3" dur="0.6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6; 1; 0.6" dur="0.6s" repeatCount="indefinite"/>
+    </circle>
+  `;
+
+  // Ghosts trailing Pac-Man
+  const ghosts = [
+    { name: "Blinky (Shadow)", color: "#ff0000", offset: 0.005 },
+    { name: "Pinky (Speedy)",  color: "#ffb8de", offset: 0.010 },
+    { name: "Inky (Bashful)",  color: "#00ffff", offset: 0.015 },
+    { name: "Clyde (Pokey)",   color: "#ffb847", offset: 0.020 }
+  ].map(g => renderGhost({ ...g, dur: duration, pathD })).join("");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg"
      width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"
-     role="img" aria-label="Pac-Man contribution graph for ${esc(username)}">
+     role="img" aria-label="Pac-Man contribution graph with ghosts for ${esc(username)}">
   <style>
     .bg { fill: #0d1117; }
+    .border { stroke: #21262d; stroke-width: 1.5; }
     .title {
       fill: #f0f6fc;
-      font: 700 17px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      font: 700 16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      letter-spacing: 0.5px;
+    }
+    .arcade-sub {
+      fill: #e3b341;
+      font: 700 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      letter-spacing: 1px;
     }
     .meta {
       fill: #8b949e;
-      font: 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      font: 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
     }
     .score {
       fill: #58a6ff;
       font: 700 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
     }
+    .score-val {
+      fill: #ffffff;
+      font: 700 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    }
     @media (prefers-color-scheme: light) {
       .bg { fill: #ffffff; }
+      .border { stroke: #d0d7de; }
       .title { fill: #1f2328; }
       .meta { fill: #57606a; }
+      .score { fill: #0969da; }
+      .score-val { fill: #1f2328; }
     }
   </style>
 
-  <rect class="bg" x="0" y="0" width="100%" height="100%" rx="14"/>
-  <rect x="1" y="1" width="${width - 2}" height="${height - 2}" rx="14"
-        fill="none" stroke="#30363d"/>
+  <!-- Background Canvas -->
+  <rect class="bg" x="0" y="0" width="100%" height="100%" rx="12"/>
+  <rect class="border" x="1" y="1" width="${width - 2}" height="${height - 2}" rx="12" fill="none"/>
 
-  <text class="title" x="${left}" y="30">🎮 CONTRIBUTION ARCADE</text>
-  <text class="meta" x="${left}" y="51">PLAYER: ${esc(username)}</text>
-  <text class="score" x="${width - left}" y="31" text-anchor="end">
-    SCORE ${totalContributions}
+  <!-- Arcade Header -->
+  <text class="title" x="${left}" y="28">🕹️ PAC-MAN CONTRIBUTION ARCADE</text>
+  <text class="arcade-sub" x="${left}" y="48">1UP <tspan class="score-val">${totalContributions * 10}</tspan>   HIGH SCORE <tspan class="score-val">${Math.max(totalContributions * 10, 9999)}</tspan></text>
+  
+  <text class="score" x="${width - left}" y="28" text-anchor="end">
+    PLAYER <tspan class="score-val">${esc(username.toUpperCase())}</tspan>
+  </text>
+  <text class="meta" x="${width - left}" y="48" text-anchor="end">
+    CONTRIBUTIONS: ${totalContributions}
   </text>
 
+  <!-- Contribution Heatmap Grid -->
   ${squares}
 
+  <!-- Pulsing Power Pellets -->
+  ${powerPellets}
+
+  <!-- Characters Layer -->
+  <!-- Pac-Man (Leader) -->
   <g>
     <circle cx="0" cy="0" r="${cell * 0.48}" fill="#ffd60a"/>
-    <path d="M 0 0 L ${cell * 0.62} ${-cell * 0.38} L ${cell * 0.62} ${cell * 0.38} Z"
+    <path d="M 0 0 L ${cell * 0.65} ${-cell * 0.4} L ${cell * 0.65} ${cell * 0.4} Z"
           fill="#0d1117">
       <animate attributeName="d"
         values="
-          M 0 0 L ${cell * 0.62} ${-cell * 0.38} L ${cell * 0.62} ${cell * 0.38} Z;
-          M 0 0 L ${cell * 0.62} -1 L ${cell * 0.62} 1 Z;
-          M 0 0 L ${cell * 0.62} ${-cell * 0.38} L ${cell * 0.62} ${cell * 0.38} Z"
-        dur="0.35s" repeatCount="indefinite"/>
+          M 0 0 L ${cell * 0.65} ${-cell * 0.4} L ${cell * 0.65} ${cell * 0.4} Z;
+          M 0 0 L ${cell * 0.65} -0.5 L ${cell * 0.65} 0.5 Z;
+          M 0 0 L ${cell * 0.65} ${-cell * 0.4} L ${cell * 0.65} ${cell * 0.4} Z"
+        dur="0.25s" repeatCount="indefinite"/>
     </path>
-    <circle cx="${cell * 0.15}" cy="${-cell * 0.22}" r="1.1" fill="#111827"/>
-    <animateMotion dur="48s" repeatCount="indefinite" rotate="auto" path="${pathD}"/>
+    <circle cx="${cell * 0.15}" cy="${-cell * 0.22}" r="1" fill="#111827"/>
+    <animateMotion dur="${duration}" repeatCount="indefinite" rotate="auto" calcMode="linear"
+                   keyPoints="0; 1" keyTimes="0; 1" path="${pathD}"/>
   </g>
 
-  <text class="meta" x="${left}" y="${height - 24}">
-    PAC-MAN IS EATING ${totalContributions} CONTRIBUTIONS • INSERT COIN_
+  <!-- 4 Chasing Ghosts: Blinky, Pinky, Inky, Clyde -->
+  ${ghosts}
+
+  <!-- Arcade Footer -->
+  <text class="meta" x="${left}" y="${height - 18}">
+    🔴 BLINKY  🌸 PINKY  🔷 INKY  🟠 CLYDE  •  CHASING PAC-MAN THROUGH ${totalContributions} CONTRIBUTIONS
+  </text>
+  <text class="meta" x="${width - left}" y="${height - 18}" text-anchor="end">
+    LIVES: 🟡 🟡 🟡 • BONUS 🍒
   </text>
 </svg>`;
 }
