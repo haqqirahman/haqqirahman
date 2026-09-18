@@ -2,10 +2,8 @@ name: Generate Pac-Man Contribution Graph
 
 on:
   workflow_dispatch:
-
   schedule:
     - cron: "0 */12 * * *"
-
   push:
     branches:
       - main
@@ -24,12 +22,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          package-manager-cache: false
-
       - name: Generate Pac-Man SVG
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -43,20 +35,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          rm -rf publish
           mkdir -p publish
           cp dist/pacman.svg publish/pacman.svg
 
           cd publish
-
           git init
           git checkout -b output
-
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           git add pacman.svg
           git commit -m "Update Pac-Man contribution graph"
-
           git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-
           git push --force origin output

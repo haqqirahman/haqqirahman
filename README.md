@@ -4,7 +4,7 @@
 
 # 👋 Hi, I'm Haqqi Rahman
 
-### Linux • Cloud • DevOps • Infrastructure
+### Linux | Cloud | DevOps | Infrastructure
 
 Building secure infrastructure, automation tools, and intelligent applications.
 
@@ -16,17 +16,17 @@ Building secure infrastructure, automation tools, and intelligent applications.
 
 ---
 
-## 🚀 About Me
+## 👨‍💻 About Me
 
-- 🔭 Interested in **Linux Server, Virtualization, and Cloud Infrastructure**
-- 🌱 Currently learning **DevOps, automation, and secure access systems**
-- 🛠️ Working with **Docker, networking, Linux environments, and infrastructure tools**
-- 💡 Interested in **Cybersecurity, PAM, and system architecture**
-- 🎯 Focused on building **reliable, secure, and scalable solutions**
+- 🐧 Interested in **Linux Server, Virtualization, and Cloud Infrastructure**
+- 🚀 Currently learning **DevOps, automation, and secure access systems**
+- 🐳 Working with **Docker, networking, Linux environments, and infrastructure tools**
+- 🛡️ Interested in **Cybersecurity, PAM, and system architecture**
+- ⚡ Focused on building **reliable, secure, and scalable solutions**
 
 ---
 
-## 🧰 Tech Stack
+## 🛠️ Tech Stack
 
 <div align="center">
 
@@ -56,7 +56,7 @@ A Telegram-based expense tracker for:
 - company reimbursement tracking
 - monthly recap
 
-### 📄 Plagicheck
+### 📝 Plagicheck
 An AI-powered academic platform with features such as:
 - plagiarism checking
 - paraphrasing
@@ -73,32 +73,21 @@ AI-assisted CCTV monitoring environment using:
 
 ---
 
-## 📊 GitHub Stats
-
-<h2 align="center">🎮 Contribution Arcade</h2>
+## 🕹️ Contribution Arcade
 
 <div align="center">
 
-<picture>
-  <source
-    media="(prefers-color-scheme: dark)"
-    srcset="https://raw.githubusercontent.com/haqqirahman/haqqirahman/output/pacman-contribution-graph-dark.svg"
-  >
-  <source
-    media="(prefers-color-scheme: light)"
-    srcset="https://raw.githubusercontent.com/haqqirahman/haqqirahman/output/pacman-contribution-graph.svg"
-  >
-  <img
-    alt="Pac-Man Contribution Graph"
-    src="https://raw.githubusercontent.com/haqqirahman/haqqirahman/output/pacman-contribution-graph.svg"
-  >
-</picture>
+<img
+  src="https://raw.githubusercontent.com/haqqirahman/haqqirahman/output/pacman.svg"
+  alt="Pac-Man Contribution Graph"
+  width="100%"
+/>
 
 </div>
 
 ---
 
-## 🌐 Connect With Me
+## 🤝 Connect With Me
 
 <div align="center">
 
@@ -110,12 +99,12 @@ AI-assisted CCTV monitoring environment using:
 
 ---
 
-## ⚡ Fun Fact
+## 💡 Fun Fact
 
 > I enjoy building things around Linux, infrastructure, security, and automation.
 
 <div align="center">
 
-### Thanks for visiting my profile 🙌
+### Thanks for visiting my profile 🙏
 
 </div>
