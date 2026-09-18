@@ -75,15 +75,16 @@ AI-assisted CCTV monitoring environment using:
 
 ## 📊 GitHub Stats
 
-<div align="center">
-
-<img height="170" src="https://github-readme-stats.vercel.app/api?username=haqqirahman&show_icons=true&theme=tokyonight&hide_border=true&border_radius=10" />
-<img height="170" src="https://streak-stats.demolab.com?user=haqqirahman&theme=tokyonight&hide_border=true&border_radius=10" />
-
-</div>
+<h2 align="center">🎮 Developer Arcade</h2>
 
 <div align="center">
-  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=haqqirahman&layout=compact&theme=tokyonight&hide_border=true&border_radius=10" />
+
+<img
+  src="https://raw.githubusercontent.com/haqqirahman/haqqirahman/output/pacman.svg"
+  alt="Pac-Man Contribution Graph"
+  width="100%"
+/>
+
 </div>
 
 ---
