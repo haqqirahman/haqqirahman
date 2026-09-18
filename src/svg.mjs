@@ -253,7 +253,7 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
   
   <text class="score-lbl" x="${left}" y="48">
     1UP <tspan class="score-val">${totalContributions * 10}</tspan>
-    &nbsp;&nbsp;&nbsp;&nbsp;HIGH SCORE <tspan class="score-val">${Math.max(totalContributions * 10, 9999)}</tspan>
+    &#160;&#160;&#160;&#160;HIGH SCORE <tspan class="score-val">${Math.max(totalContributions * 10, 9999)}</tspan>
   </text>
   
   <!-- REAL-TIME STATUS BADGE (Changes between CHASE, POWER UP, and RESPAWN) -->
@@ -409,7 +409,7 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
 
   <!-- Middle footer text -->
   <text class="meta" x="${midX}" y="${height - 14}" text-anchor="middle">
-    🔴 BLINKY &nbsp; 🌸 PINKY &nbsp; 🔷 INKY &nbsp; 🟠 CLYDE &nbsp;•&nbsp; ${totalContributions} CONTRIBUTIONS
+    🔴 BLINKY &#160; 🌸 PINKY &#160; 🔷 INKY &#160; 🟠 CLYDE &#160;•&#160; ${totalContributions} CONTRIBUTIONS
   </text>
 
   <!-- Right fruit bonus -->
