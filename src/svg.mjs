@@ -7,19 +7,16 @@ function esc(value = "") {
     .replaceAll("'", "&apos;");
 }
 
-function renderGhost({ name, color, offset, dur, pathD }) {
-  const kp = `${(1 - offset).toFixed(4)}; 1; 0; ${(1 - offset).toFixed(4)}`;
-  const kt = `0; ${offset.toFixed(4)}; ${offset.toFixed(4)}; 1`;
-
+function renderGhost({ name, color, begin, dur, pathD }) {
   return `
   <!-- Ghost: ${name} -->
   <g>
     <g>
-      <!-- Bobbing / floating animation -->
+      <!-- Bobbing / floating hovering animation -->
       <animateTransform attributeName="transform" type="translate"
         values="0 -0.8; 0 0.8; 0 -0.8" dur="0.4s" repeatCount="indefinite" additive="sum"/>
       
-      <!-- Ghost body with animated tentacles -->
+      <!-- Ghost body with animated wiggling tentacles -->
       <path fill="${color}" d="M -5.5 -1 A 5.5 5.5 0 0 1 5.5 -1 L 5.5 5.5 Q 3.7 3.5 1.8 5.5 Q 0 3.5 -1.8 5.5 Q -3.7 3.5 -5.5 5.5 Z">
         <animate attributeName="d"
           values="
@@ -33,14 +30,13 @@ function renderGhost({ name, color, offset, dur, pathD }) {
       <ellipse cx="-2" cy="-1.5" rx="2.1" ry="2.5" fill="#ffffff"/>
       <ellipse cx="2.4" cy="-1.5" rx="2.1" ry="2.5" fill="#ffffff"/>
 
-      <!-- Pupils (Classic Arcade Blue) -->
+      <!-- Pupils (Classic Arcade Blue) looking forward -->
       <ellipse cx="-1.2" cy="-1.5" rx="1.1" ry="1.4" fill="#1e3a8a"/>
       <ellipse cx="3.2" cy="-1.5" rx="1.1" ry="1.4" fill="#1e3a8a"/>
     </g>
 
-    <!-- Path motion without rotation to keep ghosts upright -->
-    <animateMotion dur="${dur}" repeatCount="indefinite" calcMode="linear"
-                   keyPoints="${kp}" keyTimes="${kt}" path="${pathD}"/>
+    <!-- Path motion without rotation to keep ghosts standing upright -->
+    <animateMotion dur="${dur}" repeatCount="indefinite" begin="${begin}" path="${pathD}"/>
   </g>`;
 }
 
@@ -88,11 +84,11 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
     });
   });
 
-  // Connect last point back to the first point via a perimeter corridor to form a continuous closed loop
+  // Connect the end of the snake path back to start via bottom corridor to form a continuous closed circuit
   if (route.length > 1) {
-    const [lastX, lastY] = route[route.length - 1];
+    const [lastX] = route[route.length - 1];
     const [firstX, firstY] = route[0];
-    const corridorY = top + days * step + 4; // Bottom runway corridor
+    const corridorY = top + days * step + 5; // y = 184 runway
 
     route.push([lastX, corridorY]);
     route.push([firstX - 14, corridorY]);
@@ -104,16 +100,16 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
     ? route.map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`).join(" ") + " Z"
     : `M ${left} ${top} Z`;
 
-  const duration = "56s";
+  const duration = "52s";
 
-  // 4 Power Pellets at the 4 corners of the maze
+  // 4 Pulsing Power Pellets at the 4 corners of the arcade grid
   const lastWeekX = left + (weeks.length - 1) * step + cell / 2;
   const firstWeekX = left + cell / 2;
   const topY = top + cell / 2;
   const bottomY = top + 6 * step + cell / 2;
 
   const powerPellets = `
-    <!-- Power Pellets (Corners) -->
+    <!-- Pulsing Power Pellets in the 4 corners -->
     <circle cx="${firstWeekX}" cy="${topY}" r="4" fill="#ffd60a">
       <animate attributeName="r" values="3; 5.2; 3" dur="0.6s" repeatCount="indefinite"/>
       <animate attributeName="opacity" values="0.6; 1; 0.6" dur="0.6s" repeatCount="indefinite"/>
@@ -132,12 +128,12 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
     </circle>
   `;
 
-  // Ghosts trailing Pac-Man
+  // 4 Authentic Arcade Ghosts with precise delay offsets behind Pac-Man
   const ghosts = [
-    { name: "Blinky (Shadow)", color: "#ff0000", offset: 0.005 },
-    { name: "Pinky (Speedy)",  color: "#ffb8de", offset: 0.010 },
-    { name: "Inky (Bashful)",  color: "#00ffff", offset: 0.015 },
-    { name: "Clyde (Pokey)",   color: "#ffb847", offset: 0.020 }
+    { name: "Blinky (Red)",    color: "#ff0000", begin: "-0.84s" },
+    { name: "Pinky (Pink)",    color: "#ffb8de", begin: "-0.56s" },
+    { name: "Inky (Cyan)",     color: "#00ffff", begin: "-0.28s" },
+    { name: "Clyde (Orange)",  color: "#ffb847", begin: "0s" }
   ].map(g => renderGhost({ ...g, dur: duration, pathD })).join("");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -214,8 +210,7 @@ export function buildPacmanSvg({ username, totalContributions, weeks }) {
         dur="0.25s" repeatCount="indefinite"/>
     </path>
     <circle cx="${cell * 0.15}" cy="${-cell * 0.22}" r="1" fill="#111827"/>
-    <animateMotion dur="${duration}" repeatCount="indefinite" rotate="auto" calcMode="linear"
-                   keyPoints="0; 1" keyTimes="0; 1" path="${pathD}"/>
+    <animateMotion dur="${duration}" repeatCount="indefinite" rotate="auto" begin="-1.20s" path="${pathD}"/>
   </g>
 
   <!-- 4 Chasing Ghosts: Blinky, Pinky, Inky, Clyde -->

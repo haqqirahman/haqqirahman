@@ -38,13 +38,14 @@ jobs:
           rm -rf publish
           mkdir -p publish
           cp dist/pacman.svg publish/pacman.svg
+          cp dist/pacman.svg publish/pacman-arcade.svg
 
           cd publish
           git init
           git checkout -b output
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add pacman.svg
+          git add pacman.svg pacman-arcade.svg
           git commit -m "Update Pac-Man contribution graph"
           git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push --force origin output
