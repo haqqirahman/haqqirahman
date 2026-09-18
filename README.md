@@ -75,15 +75,24 @@ AI-assisted CCTV monitoring environment using:
 
 ## 📊 GitHub Stats
 
-<h2 align="center">🎮 Developer Arcade</h2>
+<h2 align="center">🎮 Contribution Arcade</h2>
 
 <div align="center">
 
-<img
-  src="https://raw.githubusercontent.com/haqqirahman/haqqirahman/output/pacman.svg"
-  alt="Pac-Man Contribution Graph"
-  width="100%"
-/>
+<picture>
+  <source
+    media="(prefers-color-scheme: dark)"
+    srcset="https://raw.githubusercontent.com/haqqirahman/haqqirahman/output/pacman-contribution-graph-dark.svg"
+  >
+  <source
+    media="(prefers-color-scheme: light)"
+    srcset="https://raw.githubusercontent.com/haqqirahman/haqqirahman/output/pacman-contribution-graph.svg"
+  >
+  <img
+    alt="Pac-Man Contribution Graph"
+    src="https://raw.githubusercontent.com/haqqirahman/haqqirahman/output/pacman-contribution-graph.svg"
+  >
+</picture>
 
 </div>
 
