@@ -1,63 +1,75 @@
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&height=220&text=Haqqi%20Rahman&fontAlign=50&fontAlignY=40&color=0:0f172a,50:1e293b,100:0ea5e9&fontColor=ffffff&desc=Linux%20%7C%20Cloud%20%7C%20DevOps%20%7C%20Infrastructure&descAlign=50&descAlignY=65" width="100%" />
+
+# 👋 Hi, I'm Haqqi Rahman
+
+### Linux • Cloud • DevOps • Infrastructure
+
+Building secure infrastructure, automation tools, and intelligent applications.
+
 <p align="center">
-  <img src="./assets/github-banner.png" width="100%" />
+  <img src="https://komarev.com/ghpvc/?username=haqqirahman&label=Profile%20Views&color=0e75b6&style=for-the-badge" alt="profile views" />
 </p>
 
-<h1 align="center">
-  <img src="https://readme-typing-svg.herokuapp.com/?font=Inter&size=40&center=true&vCenter=true&width=750&height=70&duration=4000&lines=Hi+There!+👋;I'm+YOUR+NAME;DevOps+%7C+Infrastructure+%7C+Developer;Linux+%7C+Cloud+%7C+Cybersecurity" />
-</h1>
-
-<p align="center">
-Building secure infrastructure, automation tools and intelligent applications.
-</p>
+</div>
 
 ---
 
-## 👨‍💻 About Me
+## 🚀 About Me
 
-🖥️ Interested in Linux & Server Infrastructure  
-☁️ Working with Cloud & Virtualization  
-🔐 Exploring Cybersecurity & PAM  
-🐳 Working with Docker and Containers  
-🌐 Interested in Networking  
-🤖 Building AI & Automation projects  
-
----
-
-## 🛠️ Tech Stack
-
-<p align="center">
-<img src="https://skillicons.dev/icons?i=linux,ubuntu,docker,git,github,bash,python,nodejs,postgres,nginx,terraform,ansible,prometheus,grafana,vscode" />
-</p>
+- 🔭 Interested in **Linux Server, Virtualization, and Cloud Infrastructure**
+- 🌱 Currently learning **DevOps, automation, and secure access systems**
+- 🛠️ Working with **Docker, networking, Linux environments, and infrastructure tools**
+- 💡 Interested in **Cybersecurity, PAM, and system architecture**
+- 🎯 Focused on building **reliable, secure, and scalable solutions**
 
 ---
 
-## 🚀 Projects
+## 🧰 Tech Stack
+
+<div align="center">
+
+<img src="https://skillicons.dev/icons?i=linux,ubuntu,docker,git,github,bash,python,nodejs,postgres,mysql,nginx,vscode" />
+<br><br>
+<img src="https://skillicons.dev/icons?i=terraform,ansible,grafana,prometheus,cloudflare" />
+
+</div>
+
+---
+
+## 📌 Featured Projects
 
 ### 🔐 Privileged Access Management
-
-Secure infrastructure access using:
-
-`Teleport • OpenVPN • pfSense • Terraform • Ansible`
-
----
-
-### 📄 Plagicheck
-
-AI-powered plagiarism detection and academic document analysis platform.
-
----
+Secure access infrastructure using:
+- Teleport
+- OpenVPN
+- pfSense
+- Linux
+- Terraform
+- Ansible
 
 ### 🤖 Telegram Expense Bot
+A Telegram-based expense tracker for:
+- daily expense logging
+- categorization
+- company reimbursement tracking
+- monthly recap
 
-Telegram-based expense management and financial tracking system.
+### 📄 Plagicheck
+An AI-powered academic platform with features such as:
+- plagiarism checking
+- paraphrasing
+- AI detection
+- summarization
+- journal translation
 
----
-
-### 📹 AI CCTV Infrastructure
-
-CCTV monitoring architecture using:
-
-`Frigate • Docker • Proxmox • Linux`
+### 📹 CCTV & Frigate Infrastructure
+AI-assisted CCTV monitoring environment using:
+- Frigate
+- Linux
+- Docker
+- Proxmox
 
 ---
 
@@ -65,40 +77,35 @@ CCTV monitoring architecture using:
 
 <div align="center">
 
-<img width="48%" src="https://github-readme-stats.vercel.app/api?username=USERNAME&show_icons=true&theme=transparent" />
-
-<img width="48%" src="https://github-readme-streak-stats.herokuapp.com/?user=USERNAME&theme=transparent" />
+<img height="170" src="https://github-readme-stats.vercel.app/api?username=haqqirahman&show_icons=true&theme=tokyonight&hide_border=true&border_radius=10" />
+<img height="170" src="https://streak-stats.demolab.com?user=haqqirahman&theme=tokyonight&hide_border=true&border_radius=10" />
 
 </div>
 
 <div align="center">
-
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=USERNAME&layout=compact&theme=transparent" />
-
+  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=haqqirahman&layout=compact&theme=tokyonight&hide_border=true&border_radius=10" />
 </div>
 
 ---
 
 ## 🌐 Connect With Me
 
-<p align="center">
+<div align="center">
 
-<a href="https://linkedin.com/in/USERNAME">
-<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/>
-</a>
+[![GitHub](https://img.shields.io/badge/GitHub-111827?style=for-the-badge&logo=github&logoColor=white)](https://github.com/haqqirahman)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/USERNAME)
+[![Gmail](https://img.shields.io/badge/Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:youremail@example.com)
 
-<a href="mailto:YOUR_EMAIL">
-<img src="https://img.shields.io/badge/Gmail-333333?style=for-the-badge&logo=gmail&logoColor=red"/>
-</a>
-
-</p>
+</div>
 
 ---
 
+## ⚡ Fun Fact
+
+> I enjoy building things around Linux, infrastructure, security, and automation.
+
 <div align="center">
 
-### 👀 Profile Visitors
-
-<img src="https://profile-counter.glitch.me/USERNAME/count.svg"/>
+### Thanks for visiting my profile 🙌
 
 </div>
