@@ -89,7 +89,7 @@ AI-assisted CCTV monitoring environment using:
 
 ---
 
-## 🕹️ Contribution Arcade
+## 🕹️ Contribution Stats
 
 > 🎮 Ini versi graf kontribusinya. Mau main beneran? → **[▶ Play Pac-Man Arcade](https://haqqirahman.github.io/haqqirahman/game/)**
 
