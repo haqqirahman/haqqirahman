@@ -102,9 +102,9 @@ canvas {
 
 .controls-bar .back { color: #7f9bff; border-color: #7f9bff; }
 
-/* on-screen d-pad — only for touch devices */
+/* on-screen d-pad — always visible (works with mouse/touch) */
 #dpad {
-  display: none;
+  display: grid;
   grid-template-columns: repeat(3, 64px);
   grid-template-rows: repeat(2, 64px);
   gap: 8px;
@@ -128,10 +128,6 @@ canvas {
 #dpad button[data-dir="left"]  { grid-column: 1; grid-row: 2; }
 #dpad button[data-dir="down"]  { grid-column: 2; grid-row: 2; }
 #dpad button[data-dir="right"] { grid-column: 3; grid-row: 2; }
-
-@media (pointer: coarse) {
-  #dpad { display: grid; }
-}
 
 .howto {
   width: 100%;
